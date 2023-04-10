@@ -1,4 +1,4 @@
-#!/bin/env sh
+#!/bin/sh
 set -eux
 
 mkdir -p ./build
