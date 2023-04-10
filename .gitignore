@@ -697,6 +697,9 @@ FodyWeavers.xsd
 # ignore names_* for stub test
 /python/stub-test/names_*
 
+# build directories
+/include/
+
 # ignore coverage
 /coverage/
 
