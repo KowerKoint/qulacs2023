@@ -22,6 +22,7 @@ RUN apt-get update \
     libpython3-dev \
     manpages \
     man-db \
+    ninja-build \
     pandoc \
     python3 \
     python3-distutils \

@@ -20,6 +20,7 @@ RUN apt-get update \
     clang-format \
     gdb \
     cmake \
+    ninja-build \
     libboost-dev \
     doxygen \
     pandoc \
