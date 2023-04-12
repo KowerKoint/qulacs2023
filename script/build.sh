@@ -4,5 +4,5 @@ set -eux
 mkdir -p ./build
 cd ./build
 cmake -G Ninja ..
-ninja -j 4
+ninja -j $(nproc)
 cd ..
