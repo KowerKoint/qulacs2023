@@ -24,3 +24,10 @@ using ITYPE = signed long long;
 #else
 using ITYPE = unsigned long long;
 #endif
+
+//! define export command
+#if defined(__MINGW32__) || defined(_MSC_VER)
+#define DllExport __declspec(dllexport)
+#else
+#define DllExport __attribute__((visibility("default")))
+#endif

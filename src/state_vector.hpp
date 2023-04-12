@@ -17,11 +17,16 @@ enum class StateVectorImplementation { DEFAULT };
  * @brief StateVector Data Structure
  */
 template <StateVectorImplementation implementation>
-struct StateVectorData {};
+struct StateVectorData {
+    static_assert(false, "this implementation is not supported");
+};
 
 template <>
 struct StateVectorData<StateVectorImplementation::DEFAULT> {
     std::vector<CTYPE> data;
+
+    const CTYPE& operator[](ITYPE index) const { return data[index]; }
+    CTYPE& operator[](ITYPE index) { return data[index]; }
 };
 
 /**
@@ -66,4 +71,32 @@ public:
      * @param qubit_count num of qubits
      */
     StateVector(UINT qubit_count_);
+
+    /**
+     * @brief destructor
+     * \~japanese-en デストラクタ
+     */
+    ~StateVector();
+
+    /**
+     * @brief intialize state to computational basis "0"
+     * \~japanese-en 量子状態を計算基底の0状態に初期化する
+     */
+    void set_zero_state();
+    /**
+     * @brief initialize state to norm 0 state
+     * \~japanese-en 量子状態をノルム0の状態にする
+     */
+    void set_zero_norm_state();
+    /**
+     * @brief initialize state to computational basis <code>comp_basis></code>
+     * \~japanese-en 量子状態を<code>comp_basis</code>の計算基底状態に初期化する
+     */
+    void set_computational_basis(ITYPE comp_basis);
+    /**
+     * @brief initialize state to Haar random state
+     * \~japanese-en 量子状態をHaar
+     * randomにサンプリングされた量子状態に初期化する
+     */
+    void set_Haar_random_state();
 };
