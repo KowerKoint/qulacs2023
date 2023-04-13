@@ -5,7 +5,6 @@
 
 #include "../general/type.hpp"
 
-namespace qulacs_internal {
 void initialize_quantum_state(std::vector<CTYPE>& state) {
     ITYPE index;
 #ifdef _OPENMP
@@ -18,7 +17,6 @@ void initialize_quantum_state(std::vector<CTYPE>& state) {
     OMPutil::get_inst().reset_qulacs_num_threads();
 #endif
 }
-}  // namespace qulacs_internal
 
 void initialize_quantum_state_parallel(std::vector<CTYPE>& state) {
     ITYPE index, dim = state.size();

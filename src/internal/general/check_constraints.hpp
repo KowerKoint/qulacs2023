@@ -4,7 +4,6 @@
 
 #include "type.hpp"
 
-namespace qulacs_internal {
 template <typename T>
 void check_out_of_range(
     const std::string& arg_name, T arg, T lower_bound, T upper_bound) {
@@ -15,4 +14,3 @@ void check_out_of_range(
         throw std::out_of_range(ss.str());
     }
 }
-}  // namespace qulacs_internal

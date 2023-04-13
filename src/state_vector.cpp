@@ -24,7 +24,7 @@ StateVector<implementation>::~StateVector() {}
 template <StateVectorImplementation implementation>
 void StateVector<implementation>::set_zero_state() {
     if constexpr (implementation == StateVectorImplementation::DEFAULT) {
-        qulacs_internal::initialize_quantum_state(this->data.data);
+        initialize_quantum_state(this->data.data);
     } else {
         static_assert(false, "this implementation is not supported");
     }
@@ -38,7 +38,7 @@ void StateVector<implementation>::set_zero_norm_state() {
 
 template <StateVectorImplementation implementation>
 void StateVector<implementation>::set_computational_basis(ITYPE comp_basis) {
-    qulacs_internal::check_computational_basis(comp_basis, 0ULL, this->_dim);
+    check_computational_basis(comp_basis, 0ULL, this->_dim);
     set_zero_state();
     this->data[0] = 0.0;
     this->data[comp_basis] = 1.0;
@@ -47,7 +47,7 @@ void StateVector<implementation>::set_computational_basis(ITYPE comp_basis) {
 template <StateVectorImplementation implementation>
 void StateVector<implementation>::set_Haar_random_state() {
     if constexpr (implementation == StateVectorImplementation::DEFAULT) {
-        qulacs_internal::initialize_Haar_random_state(this->data.data);
+        initialize_Haar_random_state(this->data.data);
     } else {
         static_assert(false, "this implementation is not supported");
     }
