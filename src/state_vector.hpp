@@ -17,9 +17,7 @@ enum class StateVectorImplementation { DEFAULT };
  * @brief StateVector Data Structure
  */
 template <StateVectorImplementation implementation>
-struct StateVectorData {
-    static_assert(false, "this implementation is not supported");
-};
+struct StateVectorData {};
 
 template <>
 struct StateVectorData<StateVectorImplementation::DEFAULT> {

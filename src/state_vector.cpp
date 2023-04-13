@@ -1,5 +1,7 @@
 #include "state_vector.hpp"
 
+#include <cassert>
+
 #include "internal/default/init_ops.hpp"
 #include "internal/general/check_constraints.hpp"
 
@@ -14,7 +16,7 @@ StateVector<implementation>::StateVector(UINT qubit_count_)
         this->data.data.resize(this->_dim);
         this->data.data[0] = 1.0;
     } else {
-        static_assert(false, "this implementation is not supported");
+        assert(false);  // unknown implementation. must be unreachable
     }
 }
 
@@ -26,7 +28,7 @@ void StateVector<implementation>::set_zero_state() {
     if constexpr (implementation == StateVectorImplementation::DEFAULT) {
         initialize_quantum_state(this->data.data);
     } else {
-        static_assert(false, "this implementation is not supported");
+        assert(false);  // unknown implementation. must be unreachable
     }
 }
 
@@ -38,7 +40,7 @@ void StateVector<implementation>::set_zero_norm_state() {
 
 template <StateVectorImplementation implementation>
 void StateVector<implementation>::set_computational_basis(ITYPE comp_basis) {
-    check_computational_basis(comp_basis, 0ULL, this->_dim);
+    check_out_of_range("comp_basis", comp_basis, 0ULL, this->_dim);
     set_zero_state();
     this->data[0] = 0.0;
     this->data[comp_basis] = 1.0;
@@ -49,6 +51,8 @@ void StateVector<implementation>::set_Haar_random_state() {
     if constexpr (implementation == StateVectorImplementation::DEFAULT) {
         initialize_Haar_random_state(this->data.data);
     } else {
-        static_assert(false, "this implementation is not supported");
+        assert(false);  // unknown implementation. must be unreachable
     }
 }
+
+template class StateVector<StateVectorImplementation::DEFAULT>;

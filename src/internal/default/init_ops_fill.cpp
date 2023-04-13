@@ -4,6 +4,9 @@
 #endif
 
 #include "../general/type.hpp"
+#include "init_ops.hpp"
+
+void initialize_quantum_state_parallel(std::vector<CTYPE>& state);
 
 void initialize_quantum_state(std::vector<CTYPE>& state) {
     ITYPE index;

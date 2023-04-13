@@ -6,6 +6,7 @@
 #include "../general/omp_util.hpp"
 #endif
 #include "../general/type.hpp"
+#include "init_ops.hpp"
 
 // state randomization
 ITYPE xor_shift(ITYPE* state);
