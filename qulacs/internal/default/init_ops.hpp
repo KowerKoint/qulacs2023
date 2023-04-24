@@ -11,7 +11,5 @@
 
 DllExport void initialize_quantum_state(std::vector<CTYPE>& state);
 
-DllExport void initialize_Haar_random_state(std::vector<CTYPE>& state);
-
-DllExport void initialize_Haar_random_state_with_seed(
+DllExport void initialize_Haar_random_state(
     std::vector<CTYPE>& state, UINT seed);
