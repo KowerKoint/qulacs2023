@@ -84,6 +84,20 @@ public:
     StateVector operator=(const StateVector<IMPL>& other);
 
     /**
+     * @brief move constructor
+     * \~japanese-en ムーブコンストラクタ
+     * @param other ムーブ元
+     */
+    StateVector(StateVector<IMPL>&& other) noexcept;
+
+    /**
+     * @brief move assignment
+     * \~japanese-en ムーブ代入演算子
+     * @param other ムーブ元
+     */
+    StateVector operator=(StateVector<IMPL>&& other) noexcept;
+
+    /**
      * @brief intialize state to computational basis "0"
      * \~japanese-en 量子状態を計算基底の0状態に初期化する
      */
