@@ -176,6 +176,13 @@ public:
     void load(const std::vector<CTYPE>& state);
 
     /**
+     * @brief get copied state vector
+     * \~japanese-en 量子状態のコピーををstd::vector<CTYPE>として得る
+     * @return 量子状態のコピー
+     */
+    std::vector<CTYPE> duplicate_data() const;
+
+    /**
      * @brief do sampling of measured computational basis
      * \~japanese-en 量子状態を測定した際の計算基底のサンプリングを行う
      *
