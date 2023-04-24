@@ -128,7 +128,7 @@ public:
      *
      * 量子状態は変更しない。
      * @param target_qubit_index
-     * @return double
+     * @return 0が観測される確率
      */
     double get_zero_probability(UINT target_qubit_index) const;
 
