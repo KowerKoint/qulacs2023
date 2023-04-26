@@ -14,6 +14,7 @@ using UINT = unsigned int;
 using CTYPE = std::complex<double>;
 using namespace std::complex_literals;
 inline static double _cabs(CTYPE val) { return std::abs(val); }
+inline static double _cnorm(CTYPE val) { return std::norm(val); }
 inline static double _creal(CTYPE val) { return std::real(val); }
 inline static double _cimag(CTYPE val) { return std::imag(val); }
 

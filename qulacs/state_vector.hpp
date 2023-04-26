@@ -99,7 +99,8 @@ public:
      * 量子ビット数と同じ長さの0,1,2の配列。0,1はその値が観測され、2は測定をしないことを表す。
      * @return 計算された周辺確率
      */
-    double get_marginal_probability(std::vector<UINT> measured_values) const;
+    double get_marginal_probability(
+        const std::vector<UINT>& measured_values) const;
 
     /**
      * @brief calculate entropy of probability distribution
@@ -135,6 +136,13 @@ public:
     void load(const std::vector<CTYPE>& state);
 
     /**
+     * @brief copy std::vector to this
+     * \~japanese-en <code>state</code>の量子状態を自身へムーブする。
+     * @param state ムーブ元
+     */
+    void load(std::vector<CTYPE>&& state);
+
+    /**
      * @brief get copied state vector
      * \~japanese-en 量子状態のコピーををstd::vector<CTYPE>として得る
      * @return 量子状態のコピー
@@ -146,27 +154,11 @@ public:
      * \~japanese-en 量子状態を測定した際の計算基底のサンプリングを行う
      *
      * @param[in] sampling_count サンプリングを行う回数
-     * @param[in] random_seed サンプリングで乱数を振るシード値
+     * @param[in] seed サンプリングで乱数を振るシード値
      * @return サンプルされた値のリスト
      */
-    std::vector<ITYPE> sampling(UINT sampling_count, UINT random_seed);
-
-    /**
-     * @brief do sampling of measured computational basis
-     * \~japanese-en 量子状態を測定した際の計算基底のサンプリングを行う
-     *
-     * @param[in] sampling_count サンプリングを行う回数
-     * @return サンプルされた値のリスト
-     */
-    std::vector<ITYPE> sampling(UINT sampling_count);
-
-    /**
-     * @brief export to property tree
-     * \~japanese-en property treeに変換
-     *
-     * @return ptree
-     */
-    boost::property_tree::ptree to_ptree() const = 0;
+    std::vector<ITYPE> sampling(
+        UINT sampling_count, UINT seed = (UINT)time(nullptr)) const;
 };
 
 namespace state {
