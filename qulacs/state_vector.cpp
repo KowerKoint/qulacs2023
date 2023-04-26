@@ -67,7 +67,7 @@ void StateVector<IMPL>::set_Haar_random_state(UINT seed) {
 template <StateVectorImplementation IMPL>
 double StateVector<IMPL>::get_zero_probability(UINT target_qubit_index) const {
     check_out_of_range(
-        "target_qubit_index", target_qubit_index, 0, this->_qubit_count);
+        "target_qubit_index", target_qubit_index, 0U, this->_qubit_count);
     if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
         return m0_prob(this->data.data, target_qubit_index);
     } else {
@@ -78,7 +78,8 @@ double StateVector<IMPL>::get_zero_probability(UINT target_qubit_index) const {
 template <StateVectorImplementation IMPL>
 double StateVector<IMPL>::get_marginal_probability(
     const std::vector<UINT>& measured_values) const {
-    check_equal("measured_values", measured_values.size(), this->_qubit_count);
+    check_equal(
+        "measured_values", (UINT)measured_values.size(), this->_qubit_count);
     std::vector<UINT> target_index;
     std::vector<UINT> target_value;
     for (UINT i = 0; i < measured_values.size(); ++i) {
@@ -124,7 +125,7 @@ void StateVector<IMPL>::normalize(double squared_norm) {
 
 template <StateVectorImplementation IMPL>
 void StateVector<IMPL>::load(const std::vector<CTYPE>& state) {
-    check_equal("state.size()", state.size(), this->_dim);
+    check_equal("state.size()", (ITYPE)state.size(), this->_dim);
     if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
         this->data.data = state;
     } else {
@@ -134,7 +135,7 @@ void StateVector<IMPL>::load(const std::vector<CTYPE>& state) {
 
 template <StateVectorImplementation IMPL>
 void StateVector<IMPL>::load(std::vector<CTYPE>&& state) {
-    check_equal("state.size()", state.size(), this->_dim);
+    check_equal("state.size()", (ITYPE)state.size(), this->_dim);
     if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
         this->data.data = state;
     } else {
@@ -158,10 +159,9 @@ std::vector<ITYPE> StateVector<IMPL>::sampling(
         std::vector<double> stacked_prob;
         std::vector<ITYPE> result;
         double sum = 0.;
-        auto ptr = this->data_cpp();
         stacked_prob.push_back(0.);
         for (UINT i = 0; i < this->dim; ++i) {
-            sum += norm(ptr[i]);
+            sum += std::norm(this->data.data[i]);
             stacked_prob.push_back(sum);
         }
 

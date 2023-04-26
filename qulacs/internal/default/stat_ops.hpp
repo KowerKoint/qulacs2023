@@ -18,3 +18,5 @@ DllExport double marginal_prob(const std::vector<CTYPE>& state,
 
 DllExport double measurement_distribution_entropy(
     const std::vector<CTYPE>& state);
+
+DllExport double state_norm_squared(const std::vector<CTYPE>& state);

@@ -8,7 +8,7 @@ double state_norm_squared(const std::vector<CTYPE>& state) {
 #endif
     for (ITYPE state_index = 0, loop_dim = state.size(); state_index < loop_dim;
          ++state_index) {
-        norm += _cnorm(state[state_index])
+        norm += std::norm(state[state_index])
     }
 #ifdef _OPENMP
     OMPutil::get_inst().reset_qulacs_num_threads();
