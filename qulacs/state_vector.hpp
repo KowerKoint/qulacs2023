@@ -11,7 +11,7 @@
 /**
  * @brief type of StateVector Implementation
  */
-enum class StateVectorImplementation { DEFAULT };
+enum class StateVectorImplementation { DEFAULT, MPI };
 
 /**
  * @brief StateVector Data Structure
@@ -28,6 +28,7 @@ class StateVector {
 private:
     UINT _qubit_count;
     ITYPE _dim;
+    StateVectorData<IMPL> _data;
 
 public:
     /**
@@ -46,7 +47,7 @@ public:
      * @brief data
      * \~japanese-en 状態ベクトルのデータ
      */
-    StateVectorData<IMPL> data;
+    StateVectorData<IMPL>& data;
 
     /**
      * @brief constructor

@@ -6,6 +6,7 @@
 #include "../general/type.hpp"
 #include "init_ops.hpp"
 
+namespace normal {
 void initialize_quantum_state_parallel(std::vector<CTYPE>& state);
 
 void initialize_quantum_state(std::vector<CTYPE>& state) {
@@ -31,3 +32,4 @@ void initialize_quantum_state_parallel(std::vector<CTYPE>& state) {
     }
     state[0] = 1.0;
 }
+}  // namespace normal

@@ -2,6 +2,7 @@
 #include "../general/omp_util.hpp"
 #include "stat_ops.hpp"
 
+namespace normal {
 double m0_prob(const std::vector<CTYPE>& state, UINT target_qubit_index) {
     double sum = 0;
 #ifdef _OPENMP
@@ -66,3 +67,4 @@ double measurement_distribution_entropy(const std::vector<CTYPE>& state) {
 #endif
     return ent;
 }
+}  // namespace normal

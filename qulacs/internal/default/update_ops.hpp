@@ -9,4 +9,6 @@
 
 #include "../general/type.hpp"
 
+namespace normal {
 DllExport void normalize(const std::vector<CTYPE>& state, double norm);
+}

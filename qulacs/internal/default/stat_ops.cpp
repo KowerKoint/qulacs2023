@@ -1,5 +1,6 @@
 #include "stat_ops.hpp"
 
+namespace normal {
 double state_norm_squared(const std::vector<CTYPE>& state) {
     double norm = 0;
 #ifdef _OPENMP
@@ -15,3 +16,4 @@ double state_norm_squared(const std::vector<CTYPE>& state) {
 #endif
     return norm;
 }
+}  // namespace normal

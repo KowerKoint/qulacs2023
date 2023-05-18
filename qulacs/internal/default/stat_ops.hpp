@@ -9,6 +9,7 @@
 
 #include "../general/type.hpp"
 
+namespace normal {
 DllExport double m0_prob(
     const std::vector<CTYPE>& state, UINT target_qubit_index);
 
@@ -20,3 +21,4 @@ DllExport double measurement_distribution_entropy(
     const std::vector<CTYPE>& state);
 
 DllExport double state_norm_squared(const std::vector<CTYPE>& state);
+}  // namespace normal

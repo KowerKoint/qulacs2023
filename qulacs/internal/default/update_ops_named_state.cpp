@@ -1,5 +1,6 @@
 #include "update_ops.hpp"
 
+namespace normal {
 void normalize(std::vector<CTYPE>& state, double norm) {
     const double normalize_factor = 1.0 / sqrt(norm);
 #ifdef _OPENMP
@@ -14,3 +15,4 @@ void normalize(std::vector<CTYPE>& state, double norm) {
     OMPutil::get_inst().reset_qulacs_num_threads();
 #endif
 }
+}  // namespace normal

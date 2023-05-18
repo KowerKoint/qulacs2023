@@ -8,12 +8,23 @@
 #include "internal/general/check_constraints.hpp"
 #include "internal/general/random.hpp"
 
+constexpr StateVectorImplementation DEFAULT =
+    StateVectorImplementation::DEFAULT;
+constexpr StateVectorImplementation MPI = StateVectorImplementation::DEFAULT;
+
 template <>
-struct StateVectorData<StateVectorImplementation::DEFAULT> {
+struct StateVectorData<DEFAULT> {
     std::vector<CTYPE> data;
 
     // destructor and copy/move constructor/assignment is default
     StateVectorData(UINT qubit_count) : data(1ULL << qubit_count) {}
+};
+
+template <>
+struct StateVectorData<MPI> {
+    std::vector<CTYPE> data;
+    UINT inner_qc;
+    UINT outer_qc;
 };
 
 template <StateVectorImplementation IMPL>
@@ -22,12 +33,12 @@ StateVector<IMPL>::StateVector(UINT qubit_count_)
       dim(_dim),
       _qubit_count(qubit_count_),
       _dim(1ULL << qubit_count_),
-      data(qubit_count_) {}
+      _data(qubit_count_) {}
 
 template <StateVectorImplementation IMPL>
 void StateVector<IMPL>::set_zero_state() {
-    if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
-        initialize_quantum_state(this->data.data);
+    if constexpr (IMPL == DEFAULT) {
+        normal::initialize_quantum_state(this->_data.data);
     } else {
         assert(false);  // unknown IMPL. must be unreachable
     }
@@ -36,8 +47,8 @@ void StateVector<IMPL>::set_zero_state() {
 template <StateVectorImplementation IMPL>
 void StateVector<IMPL>::set_zero_norm_state() {
     set_zero_state();
-    if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
-        this->data.data[0] = 0.0;
+    if constexpr (IMPL == DEFAULT) {
+        this->_data.data[0] = 0.0;
     } else {
         assert(false);  // unknown IMPL. must be unreachable
     }
@@ -47,9 +58,9 @@ template <StateVectorImplementation IMPL>
 void StateVector<IMPL>::set_computational_basis(ITYPE comp_basis) {
     check_out_of_range("comp_basis", comp_basis, 0ULL, this->_dim);
     set_zero_state();
-    if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
-        this->data.data[0] = 0.0;
-        this->data.data[comp_basis] = 1.0;
+    if constexpr (IMPL == DEFAULT) {
+        this->_data.data[0] = 0.0;
+        this->_data.data[comp_basis] = 1.0;
     } else {
         assert(false);  // unknown IMPL. must be unreachable
     }
@@ -57,8 +68,8 @@ void StateVector<IMPL>::set_computational_basis(ITYPE comp_basis) {
 
 template <StateVectorImplementation IMPL>
 void StateVector<IMPL>::set_Haar_random_state(UINT seed) {
-    if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
-        initialize_Haar_random_state(this->data.data, seed);
+    if constexpr (IMPL == DEFAULT) {
+        normal::initialize_Haar_random_state(this->_data.data, seed);
     } else {
         assert(false);  // unknown IMPL. must be unreachable
     }
@@ -68,8 +79,8 @@ template <StateVectorImplementation IMPL>
 double StateVector<IMPL>::get_zero_probability(UINT target_qubit_index) const {
     check_out_of_range(
         "target_qubit_index", target_qubit_index, 0U, this->_qubit_count);
-    if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
-        return m0_prob(this->data.data, target_qubit_index);
+    if constexpr (IMPL == DEFAULT) {
+        return normal::m0_prob(this->_data.data, target_qubit_index);
     } else {
         assert(false);  // unknown IMPL. must be unreachable
     }
@@ -89,8 +100,9 @@ double StateVector<IMPL>::get_marginal_probability(
             target_value.push_back(measured_value);
         }
     }
-    if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
-        return marginal_prob(this->data.data, target_index, target_value);
+    if constexpr (IMPL == DEFAULT) {
+        return normal::marginal_prob(
+            this->_data.data, target_index, target_value);
     } else {
         assert(false);  // unknown IMPL. must be unreachable
     }
@@ -98,8 +110,8 @@ double StateVector<IMPL>::get_marginal_probability(
 
 template <StateVectorImplementation IMPL>
 double StateVector<IMPL>::get_entropy() const {
-    if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
-        return measurement_distribution_entropy(this->data.data);
+    if constexpr (IMPL == DEFAULT) {
+        return normal::measurement_distribution_entropy(this->_data.data);
     } else {
         assert(false);  // unknown IMPL. must be unreachable
     }
@@ -107,8 +119,8 @@ double StateVector<IMPL>::get_entropy() const {
 
 template <StateVectorImplementation IMPL>
 double StateVector<IMPL>::get_squared_norm() const {
-    if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
-        return state_norm_squared(this->data.data);
+    if constexpr (IMPL == DEFAULT) {
+        return normal::state_norm_squared(this->_data.data);
     } else {
         assert(false);  // unknown IMPL. must be unreachable
     }
@@ -116,8 +128,8 @@ double StateVector<IMPL>::get_squared_norm() const {
 
 template <StateVectorImplementation IMPL>
 void StateVector<IMPL>::normalize(double squared_norm) {
-    if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
-        ::normalize(this->data.data, squared_norm);
+    if constexpr (IMPL == DEFAULT) {
+        normal::normalize(this->_data.data, squared_norm);
     } else {
         assert(false);  // unknown IMPL. must be unreachable
     }
@@ -126,8 +138,8 @@ void StateVector<IMPL>::normalize(double squared_norm) {
 template <StateVectorImplementation IMPL>
 void StateVector<IMPL>::load(const std::vector<CTYPE>& state) {
     check_equal("state.size()", (ITYPE)state.size(), this->_dim);
-    if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
-        this->data.data = state;
+    if constexpr (IMPL == DEFAULT) {
+        this->_data.data = state;
     } else {
         assert(false);  // unknown IMPL. must be unreachable
     }
@@ -136,8 +148,8 @@ void StateVector<IMPL>::load(const std::vector<CTYPE>& state) {
 template <StateVectorImplementation IMPL>
 void StateVector<IMPL>::load(std::vector<CTYPE>&& state) {
     check_equal("state.size()", (ITYPE)state.size(), this->_dim);
-    if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
-        this->data.data = state;
+    if constexpr (IMPL == DEFAULT) {
+        this->_data.data = state;
     } else {
         assert(false);  // unknown IMPL. must be unreachable
     }
@@ -145,8 +157,8 @@ void StateVector<IMPL>::load(std::vector<CTYPE>&& state) {
 
 template <StateVectorImplementation IMPL>
 std::vector<CTYPE> StateVector<IMPL>::duplicate_data() const {
-    if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
-        return this->data.data;
+    if constexpr (IMPL == DEFAULT) {
+        return this->_data.data;
     } else {
         assert(false);  // unknown IMPL. must be unreachable
     }
@@ -155,13 +167,13 @@ std::vector<CTYPE> StateVector<IMPL>::duplicate_data() const {
 template <StateVectorImplementation IMPL>
 std::vector<ITYPE> StateVector<IMPL>::sampling(
     UINT sampling_count, UINT seed) const {
-    if constexpr (IMPL == StateVectorImplementation::DEFAULT) {
+    if constexpr (IMPL == DEFAULT) {
         std::vector<double> stacked_prob;
         std::vector<ITYPE> result;
         double sum = 0.;
         stacked_prob.push_back(0.);
         for (UINT i = 0; i < this->dim; ++i) {
-            sum += std::norm(this->data.data[i]);
+            sum += std::norm(this->_data.data[i]);
             stacked_prob.push_back(sum);
         }
 
@@ -179,4 +191,4 @@ std::vector<ITYPE> StateVector<IMPL>::sampling(
     }
 }
 
-template class StateVector<StateVectorImplementation::DEFAULT>;
+template class StateVector<DEFAULT>;

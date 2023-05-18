@@ -9,6 +9,7 @@
 #include "../general/type.hpp"
 #include "init_ops.hpp"
 
+namespace normal {
 void initialize_Haar_random_state_single(std::vector<CTYPE>& state, UINT seed) {
     ITYPE dim = state.size();
     constexpr static int ignore_first = 40;
@@ -84,3 +85,4 @@ void initialize_Haar_random_state(std::vector<CTYPE>& state, UINT seed) {
     initialize_Haar_random_state_single(state, seed);
 #endif
 }
+}  // namespace normal
