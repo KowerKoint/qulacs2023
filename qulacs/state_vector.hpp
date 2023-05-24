@@ -35,19 +35,19 @@ public:
      * @brief num of qubits
      * \~japanese-en 量子ビット数
      */
-    const UINT& qubit_count;
+    const UINT& qubit_count = _qubit_count;
 
     /**
      * @brief dimension of state vector
      * \~japanese-en 量子状態の次元
      */
-    const ITYPE& dim;
+    const ITYPE& dim = _dim;
 
     /**
      * @brief data
      * \~japanese-en 状態ベクトルのデータ
      */
-    StateVectorData<IMPL>& data;
+    const StateVectorData<IMPL>& data = _data;
 
     /**
      * @brief constructor

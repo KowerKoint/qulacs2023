@@ -8,15 +8,18 @@
 #include "internal/general/check_constraints.hpp"
 #include "internal/general/random.hpp"
 
+#ifdef _USE_MPI
+#include "internal/mpi/mpi_util.hpp"
+#endif
+
 constexpr StateVectorImplementation DEFAULT =
     StateVectorImplementation::DEFAULT;
-constexpr StateVectorImplementation MPI = StateVectorImplementation::DEFAULT;
+constexpr StateVectorImplementation MPI = StateVectorImplementation::MPI;
 
 template <>
 struct StateVectorData<DEFAULT> {
     std::vector<CTYPE> data;
 
-    // destructor and copy/move constructor/assignment is default
     StateVectorData(UINT qubit_count) : data(1ULL << qubit_count) {}
 };
 
@@ -25,13 +28,24 @@ struct StateVectorData<MPI> {
     std::vector<CTYPE> data;
     UINT inner_qc;
     UINT outer_qc;
+
+    StateVectorData(UINT qubit_count) {
+#ifdef _USE_MPI
+        MPIutil& mpiutil = MPIutil::getinst();
+        UINT mpirank = mpiutil.get_rank();
+        UINT mpisize = mpiutil.get_size();
+        UINT lognodes = (UINT)std::log2(mpisize);
+        inner_qc = qubit_count - lognodes;
+        outer_qc = lognodes;
+#else
+        assert(false);  // MPI is not available
+#endif
+    }
 };
 
 template <StateVectorImplementation IMPL>
 StateVector<IMPL>::StateVector(UINT qubit_count_)
-    : qubit_count(_qubit_count),
-      dim(_dim),
-      _qubit_count(qubit_count_),
+    : _qubit_count(qubit_count_),
       _dim(1ULL << qubit_count_),
       _data(qubit_count_) {}
 
